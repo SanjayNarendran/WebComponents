@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+   
+
+    <template>
+        <style>
+        </style>
+        <div class="container">
+            <p id="hi">
+                Hi there !!
+            </p>
+        </div>
+    </template>
+    <script>
+        (function () {
+
+            //Get the contents of the template (_currentScript is available with webcomponents.js, use currentScript if you don't use this Polyfill)
+            var template = document.querySelector('template');
+            //Create a prototype for this component
+            var proto = Object.create(HTMLElement.prototype);
+
+            //Register a createdCallback
+            proto.createdCallback = function () {
+                //Grab the contents of the template
+                var clone = document.importNode(template.content, true);
+                //Add the template contents to the shadow DOM
+                var root = this.createShadowRoot();
+                root.appendChild(clone);
+                this.readattributes();
+                root.querySelector('#hi').innerHTML= this.sampleattrib;
+
+                
+            };
+            //Called when the component instance is attached to the DOM
+            proto.attachedCallback = function () {
+                
+            };
+            //Called when one of this components attributes change
+            proto.attributeChangedCallback = function (attrName, oldVal, newVal) {
+                console.log("test");
+                root.querySelector('#hi').innerHTML = "Hi there 2";
+            };
+
+            proto.readattributes = function () {
+                this.sampleattrib = this.getAttribute("sampleattrib");
+                };
+
+            //Register the element with the document
+            document.registerElement('Hi-There', { prototype: proto });
+        }());
+    </script>
+
+
+    <Hi-There sampleattrib ="Hi there 4"></Hi-There>
+    <Hi-There sampleattrib ="Hi there 3"></Hi-There>
+
+</body>
+</html>
